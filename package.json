@@ -1,0 +1,29 @@
+{
+  "name": "backend-bingo-de-traverse",
+  "version": "1.0.0",
+  "description": "projet de bingo pour le chemin de traverse Arras",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebastien-76/bingoDeTraverseBack.git"
+  },
+  "keywords": [
+    "NodeJs",
+    "Express",
+    "Sequelize",
+    "MariaDB"
+  ],
+  "author": "Emma & Sébastien",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sebastien-76/bingoDeTraverseBack/issues"
+  },
+  "homepage": "https://github.com/sebastien-76/bingoDeTraverseBack#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
