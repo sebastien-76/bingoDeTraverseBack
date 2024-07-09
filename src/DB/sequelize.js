@@ -97,6 +97,30 @@ User.belongsToMany(Salle, { through: 'Salles_Users' })
 /* Synchro de la base de données ( option "force: true" pour vider la base) */
 const initDb = async () => {
     return sequelize.sync({ force: true }).then(_ => {
+                /* Création des roles */
+                Role.create({
+                    name: 'ADMIN'
+                }).then(role => console.log(role.toJSON()))
+                Role.create({
+                    name: 'GAMEMASTER'
+                }).then(role => console.log(role.toJSON()))
+        
+                /* Cryptage du mot de passe */
+                /* Utilisation de la fonction hash avec le mot de passe et le saltRounds */
+                bcrypt.hash('bingo', 10)
+                    .then(hash => {
+                        /* Création d'un user avec le mot de passe crypté */
+                        User.create({
+                            email: 'sebastien.divers@gmail.com',
+                            password: hash,
+                            nom: 'MAILLET',
+                            prenom: 'Sebastien',
+                            pseudo: 'Seb',
+                            roles: [
+                                { name: 'ADMIN'}
+                                ],
+                        }, { include: Role, }).then(user => console.log(user.toJSON()))
+                    })
         console.log('La base de donnée a bien été initialisée !')
     })
 }
