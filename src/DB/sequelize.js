@@ -121,10 +121,14 @@ const initDb = async () => {
                                 ],
                         }, { include: Role, }).then(user => console.log(user.toJSON()))
                     })
+
+                    Phrase.create({
+                        text: "Oh, mon Dieu!"
+                    })
         console.log('La base de donnée a bien été initialisée !')
     })
 }
 
 module.exports = {
-    initDb, User, Role
+    initDb, User, Role, Phrase, Avatar, Salle, Gamemaster
 }

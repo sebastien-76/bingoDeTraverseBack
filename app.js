@@ -1,9 +1,9 @@
 /* Récupération du paquet express */
 const express = require('express')
 
+
 /* Importer le paquet sequelize */
 const sequelize = require('./src/DB/sequelize')
-
 
 /* Creer une instance de l'application express  (serveur web) */
 const app = express()
@@ -15,6 +15,10 @@ app.use(express.json())
 sequelize.initDb()
 
 /* Importer les routes */
+const phrasesRoutes = require('./src/Routes/phrase')
+
+/* Utilisatation des routes */
+app.use('/api/phrases', phrasesRoutes)
 
 /*  Export de l'application */
 module.exports = app;
