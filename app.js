@@ -17,8 +17,14 @@ sequelize.initDb()
 /* Importer les routes */
 const phrasesRoutes = require('./src/Routes/phrase')
 
-/* Utilisatation des routes */
+/* Utilisation des routes */
 app.use('/api/phrases', phrasesRoutes)
+
+/* Importer les routes */
+const sallesRoutes = require('./src/Routes/salle')
+
+/* Utilisation des routes */
+app.use('/api/salles', sallesRoutes)
 
 /*  Export de l'application */
 module.exports = app;

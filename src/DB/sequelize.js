@@ -126,6 +126,11 @@ const initDb = async () => {
                         text: "Oh, mon Dieu!"
                     })
         console.log('La base de donnée a bien été initialisée !')
+
+                    Salle.create({
+                        name: "512 : Chevaliers et Enchanteurs"
+                    })
+        console.log('La base de donnée a bien été initialisée !')
     })
 }
 
