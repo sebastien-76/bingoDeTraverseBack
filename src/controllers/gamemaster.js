@@ -3,7 +3,7 @@ const { Gamemaster } = require('../DB/sequelize');
 exports.createGamemaster = (req, res) => {
     Gamemaster.create(req.body)
         .then(() => {
-            const message = `Le gamemaster "${req.body.text}" a été enregistré`;
+            const message = `Le gamemaster "${req.body.email}" a été enregistré`;
             res.status(201).json({ message })
         })
         .catch(error => res.status(400).json({ error }))
@@ -26,7 +26,7 @@ exports.getGamemaster = (req, res) => {
     const id = req.params.id
     Gamemaster.findByPk(id)
         .then(gamemaster => {
-            const message = `Le gamemaster ${gamemaster.name} a bien été trouvé.`
+            const message = `Le gamemaster ${gamemaster.email} a bien été trouvé.`
             res.status(200).json({ message })
         })
         .catch(error => {
@@ -43,7 +43,7 @@ exports.updateGamemaster = (req, res) => {
                     const message = `Le gamemaster n'existe pas. Reessayez avec un autre identifiant.`
                     return res.status(404).json({ message })
                 }
-                const message = `Le gamemaster ${gamemaster.name} a bien été modifié.`
+                const message = `Le gamemaster ${gamemaster.email} a bien été modifié.`
                 res.json({ message, data: gamemaster })
             })
         })
@@ -71,7 +71,7 @@ exports.deleteGamemaster = (req, res) => {
             const gamemasterDeleted = gamemaster
             Gamemaster.destroy({ where: { id: id } })
                 .then(() => {
-                    const message = `Le gamemaster ${gamemasterDeleted.name} a bien été supprimé.`
+                    const message = `Le gamemaster ${gamemasterDeleted.email} a bien été supprimé.`
                     res.json({ message })
                 })
         })
