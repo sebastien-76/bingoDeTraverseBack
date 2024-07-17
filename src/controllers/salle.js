@@ -10,7 +10,7 @@ exports.createSalle = (req, res) => {
 }
 
 exports.getSalles = (req, res) => {
-    Phrase.findAll()
+    Salle.findAll()
         .then(salles => {
             const message = `Liste des salles : `;
             const messageListeVide = `La liste des salles est vide`;
@@ -24,7 +24,7 @@ exports.getSalles = (req, res) => {
 
 exports.getSalle = (req, res) => {
     const id = req.params.id
-    Phrase.findByPk(id)
+    Salle.findByPk(id)
         .then(salle => {
             const message = `La salle ${salle.name} a bien été trouvée.`
             res.status(200).json({ message })
