@@ -119,19 +119,29 @@ const initDb = async () => {
         const hash = await bcrypt.hash('bingo', 10);
 
         // Création d'un user avec le mot de passe crypté et le rôle existant
-        const user = await User.create({
+        const seb = await User.create({
             email: 'sebastien.divers@gmail.com',
             password: hash,
-            nom: 'MAILLET',
-            prenom: 'Sebastien',
+            lastname: 'MAILLET',
+            firstname: 'Sebastien',
             pseudo: 'Seb',
         });
 
+        const emma = await User.create({
+            email: 'emma.cremeaux@gmail.com',
+            password: hash,
+            lastname: 'CREMAUX',
+            firstname: 'Emma',
+            pseudo: 'Emma',
+        });
+
         // Association des roles admin et gamemaster à l'utilisateur
-        await user.addRole([adminRole, gameMasterRole]);
+        await seb.addRole([adminRole, gameMasterRole]);
+        await emma.addRole([gameMasterRole]);
 
         // Association de l'utilisateur à une salle
-        await user.addSalle([ 1, 2, 6 ]);
+        await seb.addSalle([ 1, 2, 6 ]);
+        await emma.addSalle([ 3, 4, 5 ]);
 
         /* Creation d'une phrase avec relation salle */
         await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 6 });
