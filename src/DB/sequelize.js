@@ -96,45 +96,43 @@ User.belongsToMany(Salle, { through: 'Salles_Users' })
 
 /* Synchro de la base de données ( option "force: true" pour vider la base) */
 const initDb = async () => {
-    return sequelize.sync({ force: true }).then(_ => {
-                /* Création des roles */
-                Role.create({
-                    name: 'ADMIN'
-                }).then(role => console.log(role.toJSON()))
-                Role.create({
-                    name: 'GAMEMASTER'
-                }).then(role => console.log(role.toJSON()))
-        
-                /* Cryptage du mot de passe */
-                /* Utilisation de la fonction hash avec le mot de passe et le saltRounds */
-                bcrypt.hash('bingo', 10)
-                    .then(hash => {
-                        /* Création d'un user avec le mot de passe crypté */
-                        User.create({
-                            email: 'sebastien.divers@gmail.com',
-                            password: hash,
-                            nom: 'MAILLET',
-                            prenom: 'Sebastien',
-                            pseudo: 'Seb',
-                            roles: [
-                                { name: 'ADMIN'}
-                                ],
-                        }, { include: Role, }).then(user => console.log(user.toJSON()))
-                    })
+    try {
+        await sequelize.sync({ force: true });
+        console.log('La base de donnée a bien été initialisée !');
 
-                    Phrase.create({
-                        text: "Oh, mon Dieu!"
-                    })
+        // Création des rôles
+        const adminRole = await Role.create({ name: 'ADMIN' });
+        console.log(adminRole.toJSON());
+        const gameMasterRole = await Role.create({ name: 'GAMEMASTER' });
+        console.log(gameMasterRole.toJSON());
 
-                    Salle.create({
-                        name: "512 : Chevaliers et Enchanteurs"
-                    })
+        // Cryptage du mot de passe
+        const hash = await bcrypt.hash('bingo', 10);
 
-                    Gamemaster.create({
-                        email: "emma.cremeaux@hotmail.fr",
-            })
-        console.log('La base de donnée a bien été initialisée !')
-    })
+        // Création d'un user avec le mot de passe crypté et le rôle existant
+        const user = await User.create({
+            email: 'sebastien.divers@gmail.com',
+            password: hash,
+            nom: 'MAILLET',
+            prenom: 'Sebastien',
+            pseudo: 'Seb',
+        });
+
+        // Association des roles admin et gamemaster à l'utilisateur
+        await user.addRole([adminRole, gameMasterRole]);
+
+        /* Creation d'une salle */
+        await Salle.create({ name: "512 : Chevaliers et Enchanteurs" });
+
+        /* Creation d'une phrase avec relation salle */
+        await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 1 });
+
+        /* Creation d'un gamemaster */
+        await Gamemaster.create({ email: "emma.cremeaux@hotmail.fr" });
+
+    } catch (error) {
+        console.error('Erreur lors de l\'initialisation de la base de données: ', error);
+    }
 }
 
 module.exports = {
