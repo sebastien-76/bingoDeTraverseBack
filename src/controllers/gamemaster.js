@@ -1,4 +1,3 @@
-const gamemaster = require('../DB/models/gamemaster');
 const { Gamemaster } = require('../DB/sequelize');
 
 exports.createGamemaster = (req, res) => {
