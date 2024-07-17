@@ -125,11 +125,14 @@ const initDb = async () => {
                     Phrase.create({
                         text: "Oh, mon Dieu!"
                     })
-        console.log('La base de donnée a bien été initialisée !')
 
                     Salle.create({
                         name: "512 : Chevaliers et Enchanteurs"
                     })
+
+                    Gamemaster.create({
+                        email: "emma.cremeaux@hotmail.fr",
+            })
         console.log('La base de donnée a bien été initialisée !')
     })
 }
