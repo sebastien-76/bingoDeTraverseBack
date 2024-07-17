@@ -9,7 +9,7 @@ exports.createGamemaster = (req, res) => {
         .catch(error => res.status(400).json({ error }))
 }
 
-exports.getGamemaster = (req, res) => {
+exports.getGamemasters = (req, res) => {
     Gamemaster.findAll()
         .then(gamemasters => {
             const message = `Liste des gamemasters : `;
