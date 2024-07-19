@@ -14,7 +14,7 @@ exports.signUp = async (req, res) => {
     /* Hashage du mot de passe */
     const hashPassword = await bcrypt.hash(req.body.password, 10);
     const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
-
+    const salles = req.body.salles
 
     const user = await User.create({
         email: req.body.email,
@@ -26,6 +26,9 @@ exports.signUp = async (req, res) => {
         .then((user) => {
             /* Ajout du role par defaut*/
             user.addRole(gameMasterRole)
+            /* Ajout des salles */
+            user.addSalles(salles)
+
             const message = `L'utilisateur ${user.pseudo} a bien été enregistré.`
             res.status(201).json({ message, data: user })
         })
