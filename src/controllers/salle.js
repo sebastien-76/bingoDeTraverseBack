@@ -1,10 +1,12 @@
 const { Salle } = require('../DB/sequelize');
 
 exports.createSalle = (req, res) => {
+    const user = req.body.user
     Salle.create(req.body)
-        .then(() => {
+        .then((salle) => {
             const message = `La salle "${req.body.name}" a été enregistrée`;
             res.status(201).json({ message })
+            salle.addUsers(user)
         })
         .catch(error => res.status(400).json({ error }))
 }
