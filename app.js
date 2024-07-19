@@ -23,11 +23,13 @@ sequelize.initDb()
 const phrasesRoutes = require('./src/Routes/phrase')
 const sallesRoutes = require('./src/Routes/salle')
 const gamemastersRoutes = require('./src/Routes/gamemaster')
+const userRoutes = require('./src/Routes/user')
 
 /* Utilisation des routes */
 app.use('/api/phrases', phrasesRoutes)
 app.use('/api/salles', sallesRoutes)
 app.use('/api/gamemasters', gamemastersRoutes)
+app.use('/api/users', userRoutes)
 
 /*  Export de l'application */
 module.exports = app;
