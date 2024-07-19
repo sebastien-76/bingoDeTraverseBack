@@ -1,15 +1,20 @@
-/* Récupération du paquet express */
+/* Import d'express */
 const express = require('express')
 
-
-/* Importer le paquet sequelize */
+/* Import de sequelize */
 const sequelize = require('./src/DB/sequelize')
+
+/* Import de cors*/
+const cors = require('cors')
 
 /* Creer une instance de l'application express  (serveur web) */
 const app = express()
 
 /* Middleware pour parser le corps de la requête */
 app.use(express.json())
+
+/* Middleware pour autoriser l'acces depuis n'importe quelle origine */
+app.use(cors())
 
 /* Initialisation de la base de données */
 sequelize.initDb()
