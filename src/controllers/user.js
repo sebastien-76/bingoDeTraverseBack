@@ -1,26 +1,35 @@
 /* Import du modele User */
 const { User } = require('../DB/sequelize');
+const { Role } = require('../DB/sequelize');
+
+/* Import ValidationError et UniqueConstraintError de sequelize */
+const { ValidationError, UniqueConstraintError } = require('sequelize')
 
 /* Import du paquet bcrypt */
 const bcrypt = require('bcrypt');
 
 /* Export de la fonction création du user */
-exports.signup = async (req, res, next) => {
+exports.signUp = async (req, res) => {
+
     /* Hashage du mot de passe */
     const hashPassword = await bcrypt.hash(req.body.password, 10);
+    const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
 
-    /* Creation du user */
-    const user = User.create({
+
+    const user = await User.create({
         email: req.body.email,
         password: hashPassword,
         lastname: req.body.lastname,
         firstname: req.body.firstname,
         pseudo: req.body.pseudo
-    });
-
-    /* Ajout du role par defaut*/
-    await user.addRole([GAMEMASTER])
-
+    })
+        .then((user) => {
+            /* Ajout du role par defaut*/
+            user.addRole(gameMasterRole)
+            const message = `L'utilisateur ${user.pseudo} a bien été enregistré.`
+            res.status(201).json({ message, data: user })
+        })
+        .catch(error => res.status(400).json({ error }))
 }
 
 exports.getUsers = (req, res) => {
@@ -42,7 +51,7 @@ exports.getUser = (req, res) => {
     User.findByPk(id)
         .then(user => {
             const message = `Le user ${user.pseudo} a bien été trouvée.`
-            res.status(200).json({ message })
+            res.status(200).json({ message, data: user })
         })
         .catch(error => {
             const message = `Le user avec l'identifiant ${id} n'a pas pu être trouvé. Reessayez dans quelques instants.`
@@ -59,7 +68,7 @@ exports.updateUser = (req, res) => {
                     const message = `Le user n'existe pas. Reessayez avec un autre identifiant.`
                     return res.status(404).json({ message })
                 }
-                const message = `La user ${user.pseudo} a bien été modifiée.`
+                const message = `Le user ${user.pseudo} a bien été modifiée.`
                 res.json({ message, data: user })
             })
         })
@@ -71,7 +80,7 @@ exports.updateUser = (req, res) => {
             if (error instanceof UniqueConstraintError) {
                 return res.status(400).json({ message: error.message, data: error })
             }
-            const message = `La salle n'a pas pu être modifié. Reessayez dans quelques instants.`
+            const message = `Le user n'a pas pu être modifié. Reessayez dans quelques instants.`
             res.status(500).json({ message, data: error })
         })
 }
