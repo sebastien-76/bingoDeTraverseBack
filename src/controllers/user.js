@@ -1,6 +1,10 @@
 /* Import du modele User */
 const { User } = require('../DB/sequelize');
+/* Import du modele Role */
 const { Role } = require('../DB/sequelize');
+/* Import du modele GameMaster */
+const { Gamemaster } = require('../DB/sequelize');
+
 
 /* Import ValidationError et UniqueConstraintError de sequelize */
 const { ValidationError, UniqueConstraintError } = require('sequelize')
@@ -8,32 +12,43 @@ const { ValidationError, UniqueConstraintError } = require('sequelize')
 /* Import du paquet bcrypt */
 const bcrypt = require('bcrypt');
 
+
 /* Export de la fonction création du user */
 exports.signUp = async (req, res) => {
+    const gameMasterMail = await Gamemaster.findOne({ where: { email: req.body.email } });
+    if (gameMasterMail) {
+        try {
+            const hashPassword = await bcrypt.hash(req.body.password, 10);
+            const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
+            const salles = req.body.salles
 
-    /* Hashage du mot de passe */
-    const hashPassword = await bcrypt.hash(req.body.password, 10);
-    const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
-    const salles = req.body.salles
+            const user = await User.create({
+                email: req.body.email,
+                password: hashPassword,
+                lastname: req.body.lastname,
+                firstname: req.body.firstname,
+                pseudo: req.body.pseudo
+            })
+                .then((user) => {
+                    /* Ajout du role par defaut*/
+                    user.addRole(gameMasterRole)
+                    /* Ajout des salles */
+                    user.addSalles(salles)
 
-    const user = await User.create({
-        email: req.body.email,
-        password: hashPassword,
-        lastname: req.body.lastname,
-        firstname: req.body.firstname,
-        pseudo: req.body.pseudo
-    })
-        .then((user) => {
-            /* Ajout du role par defaut*/
-            user.addRole(gameMasterRole)
-            /* Ajout des salles */
-            user.addSalles(salles)
-
-            const message = `L'utilisateur ${user.pseudo} a bien été enregistré.`
-            res.status(201).json({ message, data: user })
-        })
-        .catch(error => res.status(400).json({ error }))
+                    const message = `L'utilisateur ${user.pseudo} a bien été enregistré.`
+                    res.status(201).json({ message, data: user })
+                })
+                .catch(error => res.status(400).json({ error }))
+        } catch (error) {
+            const message = `L'adresse email ${req.body.email} n'est pas autorisée.`
+            res.status(400).json({ error, message })
+        }
+    } else {
+        const message = `L'adresse email ${req.body.email} n'est pas autorisée.`
+        res.status(400).json({ message })
+    }
 }
+
 
 exports.getUsers = (req, res) => {
     User.findAll()
