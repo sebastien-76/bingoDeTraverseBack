@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                /* A modifier pour vérifier que l'adresse appartient à une adresse email de gamemaster */
                 isEmail: true
             },
             unique: {
@@ -19,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         password: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         lastname: {
             type: DataTypes.STRING,
