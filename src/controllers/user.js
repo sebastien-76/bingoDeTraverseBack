@@ -40,12 +40,12 @@ exports.signUp = async (req, res) => {
                 })
                 .catch(error => res.status(400).json({ error }))
         } catch (error) {
-            const message = `L'adresse email ${req.body.email} n'est pas autorisée.`
+            const message = `L'utilisateur n'a pas pu être enregistré. Reessayez dans quelques instants.`
             res.status(400).json({ error, message })
         }
     } else {
         const message = `L'adresse email ${req.body.email} n'est pas autorisée.`
-        res.status(400).json({ message })
+        res.status(403).json({ message })
     }
 }
 
