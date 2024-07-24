@@ -145,6 +145,33 @@ const initDb = async () => {
 
         /* Creation d'une phrase avec relation salle */
         await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 6 });
+        await Phrase.create({ text: "yes", SalleId: 6 });
+        await Phrase.create({ text: "trop bien!", SalleId: 6 });
+        await Phrase.create({ text: "j'aime", SalleId: 6 });
+        await Phrase.create({ text: "c'est nul", SalleId: 6 });
+        await Phrase.create({ text: "j'ai trouvé", SalleId: 6 });
+        await Phrase.create({ text: "un indice!", SalleId: 6 });
+        await Phrase.create({ text: "je ne comprend rien", SalleId: 6 });
+        await Phrase.create({ text: "tu pue", SalleId: 6 });
+        await Phrase.create({ text: "laisse moi faire", SalleId: 6 });
+        await Phrase.create({ text: "tu ne comprend pas", SalleId: 6 });
+        await Phrase.create({ text: "ya quelqu'un?", SalleId: 6 });
+        await Phrase.create({ text: "heho", SalleId: 6 });
+        await Phrase.create({ text: "tu peux répéter", SalleId: 6 });
+        await Phrase.create({ text: "salut", SalleId: 6 });
+        await Phrase.create({ text: "j'ai peur!", SalleId: 6 });
+        await Phrase.create({ text: "j'entend rien!", SalleId: 6 });
+        await Phrase.create({ text: "je ne veux pas y aller", SalleId: 6 });
+        await Phrase.create({ text: "je veux faire pipi", SalleId: 6 });
+        await Phrase.create({ text: "hey c'est toi", SalleId: 6 });
+        await Phrase.create({ text: "on est trop fort", SalleId: 6 });
+        await Phrase.create({ text: "j'adore!", SalleId: 6 });
+        await Phrase.create({ text: "j'ai péter", SalleId: 6 });
+        await Phrase.create({ text: "ca s'ouvre", SalleId: 6 });
+        await Phrase.create({ text: "salut", SalleId: 6 });
+        await Phrase.create({ text: "coucou", SalleId: 6 });
+        await Phrase.create({ text: "j'ai mal", SalleId: 6 });
+        await Phrase.create({ text: "beurk", SalleId: 6 });
 
         /* Creation d'un gamemaster */
         await Gamemaster.create({ email: "emma.cremeaux@hotmail.fr" });
