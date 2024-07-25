@@ -4,6 +4,8 @@ const { User } = require('../DB/sequelize');
 const { Role } = require('../DB/sequelize');
 /* Import du modele GameMaster */
 const { Gamemaster } = require('../DB/sequelize');
+/* Import du modele Salle */
+const { Salle } = require('../DB/sequelize');
 
 
 /* Import ValidationError et UniqueConstraintError de sequelize */
@@ -51,7 +53,9 @@ exports.signUp = async (req, res) => {
 
 
 exports.getUsers = (req, res) => {
-    User.findAll()
+    User.findAll({
+        include: Salle
+    })
         .then(users => {
             const message = `Liste des users : `;
             const messageListeVide = `La liste des users est vide`;
@@ -66,7 +70,10 @@ exports.getUsers = (req, res) => {
 
 exports.getUser = (req, res) => {
     const id = req.params.id
-    User.findByPk(id)
+    User.findOne({
+        where: { id: id },
+        include: Salle
+    })
         .then(user => {
             const message = `Le user ${user.pseudo} a bien été trouvée.`
             res.status(200).json({ message, data: user })
@@ -77,9 +84,26 @@ exports.getUser = (req, res) => {
         })
 }
 
-exports.updateUser = (req, res) => {
+exports.updateUser = async (req, res) => {
     const id = req.params.id
-    User.update(req.body, { where: { id: id } })
+    const password = req.body.password
+    const user = await User.findByPk(id)
+    /* Vérifie si le mot de passe du formulaire a été modifié */
+    if (password) {
+        bcrypt.compare(req.body.password, user.password) 
+            .then((valid) => {
+                /* Si le mot de passe n'a pas été modifié, supprime le mot de passe de la requete */
+                if (valid) {
+                    delete req.body.password
+            }
+            else {
+                /* Si le mot de passe a été modifié, hache le nouveau mot de passe */
+                const hashPassword = bcrypt.hash(req.body.password, 10);
+                req.body.password = hashPassword}
+            })
+
+    }
+    await User.update(req.body, { where: { id: id } })
         .then(() => {
             return User.findByPk(id).then(user => {
                 if (user === null) {
