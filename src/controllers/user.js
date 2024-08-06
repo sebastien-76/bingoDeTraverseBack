@@ -37,7 +37,7 @@ exports.signUp = async (req, res) => {
                     /* Ajout des salles */
                     user.addSalles(salles)
 
-                    const message = `L'utilisateur ${user.pseudo} a bien été enregistré.`
+                    const message = `L'utilisateur ${user.email} a bien été enregistré.`
                     res.status(201).json({ message, data: user })
                 })
                 .catch(error => res.status(400).json({ error }))
