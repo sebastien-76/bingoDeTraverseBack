@@ -24,12 +24,14 @@ const phrasesRoutes = require('./src/Routes/phrase')
 const sallesRoutes = require('./src/Routes/salle')
 const gamemastersRoutes = require('./src/Routes/gamemaster')
 const userRoutes = require('./src/Routes/user')
+const connexionRoutes = require('./src/Routes/connexion')
 
 /* Utilisation des routes */
 app.use('/api/phrases', phrasesRoutes)
 app.use('/api/salles', sallesRoutes)
 app.use('/api/gamemasters', gamemastersRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/connexion', connexionRoutes)
 
 /*  Export de l'application */
 module.exports = app;
