@@ -88,8 +88,9 @@ exports.updateGrille = async (req, res) => {
       }
   
       // Récupérer les cases de la grille
-      const cases = grille.case; // Récupérer le tableau de cases de la grille
-      const caseIndex = cases.findIndex(c => c.phraseId === phraseId); // Trouver l'index de la case à valider
+      const cases = grille.case;
+      // Trouver l'index de la case à valider
+      const caseIndex = cases.findIndex(c => c.phraseId === phraseId); 
   
       if (caseIndex === -1) {
         return res.status(400).json({ error: 'Phrase non trouvée dans la grille' });
@@ -97,10 +98,37 @@ exports.updateGrille = async (req, res) => {
   
       // Mettre à jour le tableau des cases validées
       const updatedValidatedCases = [...grille.validatedCases];
-      updatedValidatedCases[caseIndex] = true; // Marquer la case correspondante comme validée
+      // Marquer la case correspondante comme validée
+      updatedValidatedCases[caseIndex] = true; 
   
       // Mettre à jour la grille dans la base de données
       grille.validatedCases = updatedValidatedCases;
+
+      // verification si fini
+      for (let i = 0; i < 5; i++) {
+        if (grille.validatedCases[i * 5] && grille.validatedCases[i * 5 + 1] && grille.validatedCases[i * 5 + 2] && grille.validatedCases[i * 5 + 3] && grille.validatedCases[i * 5 + 4]) {
+          grille.finished = true;
+          break;
+        }
+        if (grille.validatedCases[i] && grille.validatedCases[i + 5] && grille.validatedCases[i + 10] && grille.validatedCases[i + 15] && grille.validatedCases[i + 20]) {
+          grille.finished = true;
+          break;
+        }
+        if (grille.validatedCases[i] && grille.validatedCases[i + 6] && grille.validatedCases[i + 12] && grille.validatedCases[i + 18] && grille.validatedCases[i + 24]) {
+          grille.finished = true;
+          break;
+        }
+        if (grille.validatedCases[i] && grille.validatedCases[i + 4] && grille.validatedCases[i + 8] && grille.validatedCases[i + 12] && grille.validatedCases[i + 16]) {
+          grille.finished = true;
+          break;
+        }
+      
+      }
+
+      
+  
+      // Mettre à jour la grille dans la base de données
+      
       await grille.save();
   
       res.status(200).json({ message: 'La grille a bien été modifiée', data: grille });
