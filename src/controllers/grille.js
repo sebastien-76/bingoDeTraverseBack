@@ -5,7 +5,7 @@ exports.createGrille = async (req, res) => {
     const UserId = req.params.userId;
     try {
         // Vérifier si l'utilisateur a déjà une grille en cours
-        const existingGrille = await Grille.findOne({ where: { UserId, completed: false } });
+        const existingGrille = await Grille.findOne({ where: { UserId, finished: false } });
         if (existingGrille) {
             return res.status(200).json({
                 message: 'Grille en cours trouvée',
@@ -49,7 +49,7 @@ exports.createGrille = async (req, res) => {
 exports.getGrilleByUser = async (req, res) => {
     const UserId = req.params.userId;
     try {
-        const grille = await Grille.findOne({ where: { UserId, completed: false } });
+        const grille = await Grille.findOne({ where: { UserId, finished: false } });
         if (!grille) {
             return res.status(404).json({ error: 'Grille non trouvée' });
         }

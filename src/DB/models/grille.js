@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: Array(25).fill(false)
     },
-    completed: {
+    finished: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
