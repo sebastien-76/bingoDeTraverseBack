@@ -75,66 +75,73 @@ exports.getGrilleById = async (req, res) => {
     }
 };
 
-// Mettre à jour une grille par ID
 exports.updateGrille = async (req, res) => {
     const id = req.params.id;
-    const { phraseId } = req.body; // L'ID de la phrase que l'utilisateur a validée
-  
+    const caseValide = req.body.validatedCases;
+
     try {
-      // Trouver la grille par ID
-      const grille = await Grille.findByPk(id);
-      if (!grille) {
-        return res.status(404).json({ error: 'Grille non trouvée' });
-      }
-  
-      // Récupérer les cases de la grille
-      const cases = grille.case;
-      // Trouver l'index de la case à valider
-      const caseIndex = cases.findIndex(c => c.phraseId === phraseId); 
-  
-      if (caseIndex === -1) {
-        return res.status(400).json({ error: 'Phrase non trouvée dans la grille' });
-      }
-  
-      // Mettre à jour le tableau des cases validées
-      const updatedValidatedCases = [...grille.validatedCases];
-      // Marquer la case correspondante comme validée
-      updatedValidatedCases[caseIndex] = true; 
-  
-      // Mettre à jour la grille dans la base de données
-      grille.validatedCases = updatedValidatedCases;
+        const grille = await Grille.findByPk(id);
+        if (!grille) {
+            return res.status(404).json({ error: 'Grille non trouvée' });
+        }
 
-      // verification si fini
-      for (let i = 0; i < 5; i++) {
-        if (grille.validatedCases[i * 5] && grille.validatedCases[i * 5 + 1] && grille.validatedCases[i * 5 + 2] && grille.validatedCases[i * 5 + 3] && grille.validatedCases[i * 5 + 4]) {
-          grille.finished = true;
-          break;
-        }
-        if (grille.validatedCases[i] && grille.validatedCases[i + 5] && grille.validatedCases[i + 10] && grille.validatedCases[i + 15] && grille.validatedCases[i + 20]) {
-          grille.finished = true;
-          break;
-        }
-        if (grille.validatedCases[i] && grille.validatedCases[i + 6] && grille.validatedCases[i + 12] && grille.validatedCases[i + 18] && grille.validatedCases[i + 24]) {
-          grille.finished = true;
-          break;
-        }
-        if (grille.validatedCases[i] && grille.validatedCases[i + 4] && grille.validatedCases[i + 8] && grille.validatedCases[i + 12] && grille.validatedCases[i + 16]) {
-          grille.finished = true;
-          break;
-        }
-      
-      }
+        grille.validatedCases = caseValide;
 
-      
-  
-      // Mettre à jour la grille dans la base de données
-      
-      await grille.save();
-  
-      res.status(200).json({ message: 'La grille a bien été modifiée', data: grille });
+        // Vérification si la grille est terminée
+        grille.finished = false;
+        for (let i = 0; i < 5; i++) {
+            if (
+                grille.validatedCases[i * 5] && grille.validatedCases[i * 5 + 1] && 
+                grille.validatedCases[i * 5 + 2] && grille.validatedCases[i * 5 + 3] && 
+                grille.validatedCases[i * 5 + 4]
+            ) {
+                grille.finished = true;
+                break;
+            }
+            if (
+                grille.validatedCases[i] && grille.validatedCases[i + 5] && 
+                grille.validatedCases[i + 10] && grille.validatedCases[i + 15] && 
+                grille.validatedCases[i + 20]
+            ) {
+                grille.finished = true;
+                break;
+            }
+            if (
+                grille.validatedCases[0] && grille.validatedCases[6] && 
+                grille.validatedCases[12] && grille.validatedCases[18] && 
+                grille.validatedCases[24]
+            ) {
+                grille.finished = true;
+                break;
+            }
+            if (
+                grille.validatedCases[4] && grille.validatedCases[8] && 
+                grille.validatedCases[12] && grille.validatedCases[16] && 
+                grille.validatedCases[20]
+            ) {
+                grille.finished = true;
+                break;
+            }
+        }
+
+        await grille.save();
+
+        // Vidage de la table Grille si l'utilisateur a fini la grille
+        if (grille.finished) {
+            await Grille.destroy({
+                where: {}
+            });
+        }
+
+        // Si la grille n'est pas terminée, renvoyer une réponse normale
+        return res.status(200).json({ message: 'La grille a bien été modifiée', data: grille });
+
     } catch (error) {
-      console.error("Erreur lors de la modification de la grille :", error);
-      res.status(500).json({ error: 'La grille n\'a pas pu être modifiée.' });
+        console.error("Erreur lors de la modification de la grille :", error);
+        return res.status(500).json({ error: 'La grille n\'a pas pu être modifiée.' });
     }
-  };
+};
+
+
+
   
