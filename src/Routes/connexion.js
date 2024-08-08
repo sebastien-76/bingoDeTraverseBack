@@ -5,6 +5,4 @@ const connexionController = require('../controllers/connexion');
 
 router.post('/', connexionController.signin);
 
-
 module.exports = router
-
