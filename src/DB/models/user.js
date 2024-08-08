@@ -30,5 +30,9 @@ module.exports = (sequelize, DataTypes) => {
         pseudo: {
             type: DataTypes.STRING
         },
+        points: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        }
     })
 }

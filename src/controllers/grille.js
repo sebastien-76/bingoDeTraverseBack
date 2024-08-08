@@ -1,4 +1,5 @@
-const { Grille, Phrase } = require('../DB/sequelize');
+const user = require('../DB/models/user');
+const { Grille, Phrase, User } = require('../DB/sequelize');
 
 // Créer une nouvelle grille pour un utilisateur spécifique
 exports.createGrille = async (req, res) => {
@@ -128,6 +129,12 @@ exports.updateGrille = async (req, res) => {
 
         // Vidage de la table Grille si l'utilisateur a fini la grille
         if (grille.finished) {
+            // ajouter un point au user qui a fini la grille
+            const user = await User.findByPk(grille.UserId);
+            user.points += 1;
+            await user.save();
+
+
             await Grille.destroy({
                 where: {}
             });
