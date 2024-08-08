@@ -1,35 +1,37 @@
 /* Import d'express */
-const express = require('express')
+const express = require('express');
 
 /* Import de sequelize */
-const sequelize = require('./src/DB/sequelize')
+const sequelize = require('./src/DB/sequelize');
 
 /* Import de cors*/
-const cors = require('cors')
+const cors = require('cors');
 
-/* Creer une instance de l'application express  (serveur web) */
-const app = express()
+/* Creer une instance de l'application express (serveur web) */
+const app = express();
 
 /* Middleware pour parser le corps de la requête */
-app.use(express.json())
+app.use(express.json());
 
 /* Middleware pour autoriser l'acces depuis n'importe quelle origine */
-app.use(cors())
+app.use(cors());
 
 /* Initialisation de la base de données */
-sequelize.initDb()
+sequelize.initDb();
 
 /* Importer les routes */
-const phrasesRoutes = require('./src/Routes/phrase')
-const sallesRoutes = require('./src/Routes/salle')
-const gamemastersRoutes = require('./src/Routes/gamemaster')
-const userRoutes = require('./src/Routes/user')
+const phrasesRoutes = require('./src/Routes/phrase');
+const sallesRoutes = require('./src/Routes/salle');
+const gamemastersRoutes = require('./src/Routes/gamemaster');
+const userRoutes = require('./src/Routes/user');
+const grillesRoutes = require('./src/Routes/grille');  // Ajout des routes des grilles
 
 /* Utilisation des routes */
-app.use('/api/phrases', phrasesRoutes)
-app.use('/api/salles', sallesRoutes)
-app.use('/api/gamemasters', gamemastersRoutes)
-app.use('/api/users', userRoutes)
+app.use('/api/phrases', phrasesRoutes);
+app.use('/api/salles', sallesRoutes);
+app.use('/api/gamemasters', gamemastersRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/grilles', grillesRoutes);  // Ajout des routes des grilles
 
-/*  Export de l'application */
+/* Export de l'application */
 module.exports = app;

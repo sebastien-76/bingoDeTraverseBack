@@ -21,6 +21,9 @@ const SalleModel = require('./models/salle')
 /* Import du modèle gamemaster */
 const GamemasterModel = require('./models/gamemaster')
 
+/* Import du modèle grille */
+const GrilleModel = require('./models/grille')
+
 
 /* Import du paquet bcrypt */
 const bcrypt = require('bcrypt')
@@ -77,6 +80,9 @@ const Salle = SalleModel(sequelize, DataTypes)
 /* Instanciation du modèle  Gamemaster*/
 const Gamemaster = GamemasterModel(sequelize, DataTypes)
 
+/* Instanciation du modèle  Grille*/
+const Grille = GrilleModel(sequelize, DataTypes)
+
 /* Association  Many to Many entre user et role */
 User.belongsToMany(Role, { through: 'Users_Roles' })
 Role.belongsToMany(User, { through: 'Users_Roles' })
@@ -92,6 +98,15 @@ Phrase.belongsTo(Salle)
 /* Association Many to Many entre salle et User */
 Salle.belongsToMany(User, { through: 'Salles_Users' })
 User.belongsToMany(Salle, { through: 'Salles_Users' })
+
+/* Association  One to Many entre user et grille */
+User.hasMany(Grille)
+Grille.belongsTo(User)
+
+/* Association Many to Many entre grille et phrase */
+Grille.belongsToMany(Phrase, { through: 'Grilles_Phrases' })
+Phrase.belongsToMany(Grille, { through: 'Grilles_Phrases' })
+
 
 
 /* Synchro de la base de données ( option "force: true" pour vider la base) */
@@ -176,11 +191,13 @@ const initDb = async () => {
         /* Creation d'un gamemaster */
         await Gamemaster.create({ email: "emma.cremeaux@hotmail.fr" });
 
+
+
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de la base de données: ', error);
     }
 }
 
 module.exports = {
-    initDb, User, Role, Phrase, Avatar, Salle, Gamemaster
+    initDb, User, Role, Phrase, Avatar, Salle, Gamemaster, Grille
 }
