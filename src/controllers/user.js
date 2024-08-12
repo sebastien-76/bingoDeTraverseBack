@@ -72,7 +72,11 @@ exports.getUser = (req, res) => {
     const id = req.params.id
     User.findOne({
         where: { id: id },
-        include: Salle
+        include: [
+            { model: Salle },
+            { model: Role }
+        ]
+
     })
         .then(user => {
             const message = `Le user ${user.pseudo} a bien été trouvée.`
@@ -90,16 +94,17 @@ exports.updateUser = async (req, res) => {
     const user = await User.findByPk(id)
     /* Vérifie si le mot de passe du formulaire a été modifié */
     if (password) {
-        bcrypt.compare(req.body.password, user.password) 
+        bcrypt.compare(req.body.password, user.password)
             .then((valid) => {
                 /* Si le mot de passe n'a pas été modifié, supprime le mot de passe de la requete */
                 if (valid) {
                     delete req.body.password
-            }
-            else {
-                /* Si le mot de passe a été modifié, hache le nouveau mot de passe */
-                const hashPassword = bcrypt.hash(req.body.password, 10);
-                req.body.password = hashPassword}
+                }
+                else {
+                    /* Si le mot de passe a été modifié, hache le nouveau mot de passe */
+                    const hashPassword = bcrypt.hash(req.body.password, 10);
+                    req.body.password = hashPassword
+                }
             })
 
     }

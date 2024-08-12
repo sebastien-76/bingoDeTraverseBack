@@ -1,10 +1,11 @@
 const { User } = require('../DB/sequelize');
+const { Role } = require('../DB/sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const privateKey = require('../Middleware/auth/private_key');
 
 exports.signin = (req, res) => {
-    User.findOne({ where: { email: req.body.email } })
+    User.findOne({ where: { email: req.body.email }, include: [{model: Role, attributes:{exclude: ['Users_Roles']} }] })
         .then(user => {
             /* Verification de la presence de l'utilisateur dans la base de données */
             if (!user) {
@@ -20,9 +21,15 @@ exports.signin = (req, res) => {
                         return res.status(401).json({ message })
                     }
 
+                    const role = user.Roles.map(role => role.name)
+
                     /* Si le mot de passe est correct, on renvoie un token */
                     const token = jwt.sign(
-                        { userId: user.id },
+                        {
+                            userId: user.id,
+                            pseudo: user.pseudo,
+                            role: role
+                        },
                         privateKey,
                         { expiresIn: '24h' }
                     )
