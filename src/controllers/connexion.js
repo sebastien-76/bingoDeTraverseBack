@@ -9,8 +9,8 @@ exports.signin = (req, res) => {
         .then(user => {
             /* Verification de la presence de l'utilisateur dans la base de données */
             if (!user) {
-                const message = `L'utilisateur demandé n'existe pas.`
-                return res.status(404).json(message)
+                const message = `Email ou mot de passe incorrect, veuillez réessayer!`
+                return res.status(401).json(message)
             }
             /* Comparaison du mot de passe entré par l'utilisateur avec le mot de passe crypté */
             bcrypt.compare(req.body.password, user.password)
