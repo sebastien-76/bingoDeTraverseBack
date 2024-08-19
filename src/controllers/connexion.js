@@ -17,7 +17,7 @@ exports.signin = (req, res) => {
                 .then(isPasswordValid => {
                     /* Verification du mot de passe */
                     if (!isPasswordValid) {
-                        const message = `Le mot de passe est incorrect.`
+                        const message = `Email ou mot de passe incorrect, veuillez réessayer!`
                         return res.status(401).json({ message })
                     }
 
