@@ -156,9 +156,70 @@ const initDb = async () => {
 
         // Association de l'utilisateur à une salle
         await seb.addSalle([ 1, 2, 6 ]);
-        await emma.addSalle([ 3, 4, 5 ]);
+        await emma.addSalle([ 3, 4, 5 , 6 ]);
 
-        /* Creation d'une phrase avec relation salle */
+
+        // creation des phrases pour la salle 1
+        await Phrase.create({ text: "phrase 1 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 2 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 3 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 4 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 5 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 6 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 7 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 8 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 9 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "phrase 10 salle 1", SalleId: 1 });
+
+        // creation des phrases pour la salle 2
+        await Phrase.create({ text: "phrase 1 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 2 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 3 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 4 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 5 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 6 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 7 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 8 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 9 salle 2", SalleId: 2 });
+        await Phrase.create({ text: "phrase 10 salle 2", SalleId: 2 });
+
+        // creation des phrases pour la salle 3
+        await Phrase.create({ text: "phrase 1 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 2 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 3 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 4 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 5 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 6 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 7 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 8 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 9 salle 3", SalleId: 3 });
+        await Phrase.create({ text: "phrase 10 salle 3", SalleId: 3 });
+
+        // creation des phrases pour la salle 4
+        await Phrase.create({ text: "phrase 1 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 2 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 3 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 4 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 5 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 6 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 7 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 8 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 9 salle 4", SalleId: 4 });
+        await Phrase.create({ text: "phrase 10 salle 4", SalleId: 4 });
+
+        // creation des phrases pour la salle 5
+        await Phrase.create({ text: "phrase 1 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 2 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 3 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 4 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 5 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 6 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 7 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 8 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 9 salle 5", SalleId: 5 });
+        await Phrase.create({ text: "phrase 10 salle 5", SalleId: 5 });
+
+        // creation des phrases pour la salle 6
         await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 6 });
         await Phrase.create({ text: "yes", SalleId: 6 });
         await Phrase.create({ text: "trop bien!", SalleId: 6 });
@@ -187,6 +248,7 @@ const initDb = async () => {
         await Phrase.create({ text: "coucou", SalleId: 6 });
         await Phrase.create({ text: "j'ai mal", SalleId: 6 });
         await Phrase.create({ text: "beurk", SalleId: 6 });
+        
 
         /* Creation d'un gamemaster */
         await Gamemaster.create({ email: "emma.cremeaux@hotmail.fr" });

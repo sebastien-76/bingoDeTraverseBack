@@ -1,5 +1,6 @@
 const user = require('../DB/models/user');
-const { Grille, Phrase, User } = require('../DB/sequelize');
+const { Grille, Phrase, User, Salle } = require('../DB/sequelize');
+const { getUser } = require('./user');
 
 // Créer une nouvelle grille pour un utilisateur spécifique
 exports.createGrille = async (req, res) => {
@@ -14,11 +15,26 @@ exports.createGrille = async (req, res) => {
             });
         }
 
-        // Récupérer toutes les phrases de la base de données
+        // Charger les phrases de la base de données
         const phrases = await Phrase.findAll();
 
+        // recuperer les info de l'utilisateur
+        const userPlayer = await User.findOne({
+            where: { id: UserId },
+            include: [ Salle ]
+        })
+
+        // Charger les salles de l'utilisateur
+        const sallesUser = userPlayer.Salles;
+
+        // recuperer les id des salles
+        const sallesIds = sallesUser.map((salle) => salle.dataValues.id);
+
+        // Filtrer les phrases en fonction des salles de l'utilisateur
+        const filteredPhrases = phrases.filter((phrase) => sallesIds.includes(phrase.SalleId));
+
         // Sélectionner aléatoirement 25 phrases
-        const selectedPhrases = phrases.sort(() => Math.random() - 0.5).slice(0, 25);
+        const selectedPhrases = filteredPhrases.sort(() => Math.random() - 0.5).slice(0, 25);
 
         // Créer les cases de la grille avec les IDs des phrases sélectionnées
         const caseGrille = selectedPhrases.map((phrase) => ({
