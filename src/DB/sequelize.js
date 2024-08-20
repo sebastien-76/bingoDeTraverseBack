@@ -9,9 +9,6 @@ const UserModel = require('./models/user')
 /* Import du modèle role */
 const RoleModel = require('./models/role')
 
-/* Import du modèle avatar */
-const AvatarModel = require('./models/avatar')
-
 /* Import du modèle phrase */
 const PhraseModel = require('./models/phrase')
 
@@ -71,9 +68,6 @@ const Role = RoleModel(sequelize, DataTypes)
 /* Instanciation du modèle  Phrase*/
 const Phrase = PhraseModel(sequelize, DataTypes)
 
-/* Instanciation du modèle  Avatar*/
-const Avatar = AvatarModel(sequelize, DataTypes)
-
 /* Instanciation du modèle  Salle*/
 const Salle = SalleModel(sequelize, DataTypes)
 
@@ -86,10 +80,6 @@ const Grille = GrilleModel(sequelize, DataTypes)
 /* Association  Many to Many entre user et role */
 User.belongsToMany(Role, { through: 'Users_Roles' })
 Role.belongsToMany(User, { through: 'Users_Roles' })
-
-/* Association  One to One entre user et avatar */
-User.belongsTo(Avatar)
-Avatar.hasOne(User)
 
 /* Association  One to Many entre salle et phrase */
 Salle.hasMany(Phrase)
@@ -261,5 +251,5 @@ const initDb = async () => {
 }
 
 module.exports = {
-    initDb, User, Role, Phrase, Avatar, Salle, Gamemaster, Grille
+    initDb, User, Role, Phrase, Salle, Gamemaster, Grille
 }
