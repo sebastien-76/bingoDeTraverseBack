@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         points: {
             type: DataTypes.INTEGER,
             defaultValue: 0
+        },
+        imageProfilURL: {
+            type: DataTypes.STRING
         }
     })
 }
