@@ -7,6 +7,8 @@ const { Gamemaster } = require('../DB/sequelize');
 /* Import du modele Salle */
 const { Salle } = require('../DB/sequelize');
 
+const fs = require('fs');
+
 
 /* Import ValidationError et UniqueConstraintError de sequelize */
 const { ValidationError, UniqueConstraintError } = require('sequelize')
@@ -29,7 +31,8 @@ exports.signUp = async (req, res) => {
                 password: hashPassword,
                 lastname: req.body.lastname,
                 firstname: req.body.firstname,
-                pseudo: req.body.pseudo
+                pseudo: req.body.pseudo,
+                imageProfilURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
             })
                 .then((user) => {
                     /* Ajout du role par defaut*/
@@ -108,6 +111,10 @@ exports.updateUser = async (req, res) => {
             })
 
     }
+    if (req.file) {
+        imageProfilURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        req.body.imageProfilURL = imageProfilURL
+    }
     await User.update(req.body, { where: { id: id } })
         .then(() => {
             return User.findByPk(id).then(user => {
@@ -140,12 +147,16 @@ exports.deleteUser = (req, res) => {
                 const message = `Le user n'existe pas. Reessayez avec un autre identifiant.`
                 return res.status(404).json({ message })
             }
-            const userDeleted = user
-            User.destroy({ where: { id: id } })
-                .then(() => {
-                    const message = `Le user ${userDeleted.pseudo} a bien été supprimée.`
-                    res.json({ message })
-                })
+            const userDeleted = user;
+            const filename = user.imageProfilURL.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                User.destroy({ where: { id: id } })
+                    .then(() => {
+                        const message = `Le user ${userDeleted.pseudo} a bien été supprimée.`
+                        res.json({ message })
+                    })
+            })
+
         })
         .catch(error => {
             message = `Le user avec l'identifiant ${id} n'a pas pu être supprimée. Reessayez dans quelques instants.`
