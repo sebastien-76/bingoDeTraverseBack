@@ -108,12 +108,15 @@ exports.updateUser = async (req, res) => {
             })
 
     }
-    await User.update(req.body, { where: { id: id } })
+    await User.update(req.body, { where: { id: id }, include: [{ model: Salle }, { model: Role }] })
         .then(() => {
             return User.findByPk(id).then(user => {
                 if (user === null) {
                     const message = `Le user n'existe pas. Reessayez avec un autre identifiant.`
                     return res.status(404).json({ message })
+                }
+                if (req.body.Salles) {
+                    user.addSalle(req.body.Salles)
                 }
                 const message = `Le user ${user.pseudo} a bien été modifiée.`
                 res.json({ message, data: user })
