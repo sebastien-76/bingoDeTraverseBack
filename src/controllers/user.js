@@ -97,7 +97,7 @@ exports.updateUser = async (req, res) => {
     const user = await User.findByPk(id)
     /* Vérifie si le mot de passe du formulaire a été modifié */
     if (password) {
-        bcrypt.compare(req.body.password, user.password)
+        const hashPassword = await bcrypt.compare(req.body.password, user.password)
             .then((valid) => {
                 /* Si le mot de passe n'a pas été modifié, supprime le mot de passe de la requete */
                 if (valid) {
@@ -105,16 +105,17 @@ exports.updateUser = async (req, res) => {
                 }
                 else {
                     /* Si le mot de passe a été modifié, hache le nouveau mot de passe */
-                    const hashPassword = bcrypt.hash(req.body.password, 10);
-                    req.body.password = hashPassword
+                    return bcrypt.hash(req.body.password, 10);
                 }
             })
-
+        req.body.password = hashPassword
     }
+
     if (req.file) {
         imageProfilURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
         req.body.imageProfilURL = imageProfilURL
     }
+    
     await User.update(req.body, { where: { id: id }, include: [{ model: Salle }, { model: Role }] })
         .then(() => {
             return User.findByPk(id).then(user => {
