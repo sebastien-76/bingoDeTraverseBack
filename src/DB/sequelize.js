@@ -140,13 +140,24 @@ const initDb = async () => {
             pseudo: 'Emma',
         });
 
+        // Creation d'un user test
+        const test = await User.create({
+            email: 'test@gmail.com',
+            password: hash,
+            lastname: 'test',
+            firstname: 'test',
+            pseudo: 'test',
+        });
+
         // Association des roles admin et gamemaster à l'utilisateur
         await seb.addRole([adminRole, gameMasterRole]);
         await emma.addRole([gameMasterRole]);
+        await test.addRole([adminRole, gameMasterRole]);
 
         // Association de l'utilisateur à une salle
         await seb.addSalle([ 1, 2, 6 ]);
         await emma.addSalle([ 3, 4, 5 , 6 ]);
+        await test.addSalle([ 6 ]);
 
 
         // creation des phrases pour la salle 1

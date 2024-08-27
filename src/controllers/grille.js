@@ -143,10 +143,14 @@ exports.updateGrille = async (req, res) => {
       }
     }
 
+    // recuperer le user dont le mail est test@gmail.com
+    const userTest = await User.findOne({ where: { email: 'test@gmail.com' } });
+
+
     await grille.save();
 
-    // Si la grille est terminée
-    if (grille.finished) {
+    // Si la grille est terminée et que ce n'est pas le userTest qui a terminé la grille
+    if (grille.finished && grille.UserId !== userTest.id) {
       // Ajouter un point au user qui a fini la grille
       const user = await User.findByPk(grille.UserId);
       user.points += 1;
