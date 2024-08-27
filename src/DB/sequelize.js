@@ -133,7 +133,7 @@ const initDb = async () => {
         });
 
         const emma = await User.create({
-            email: 'emma.cremeaux@gmail.com',
+            email: 'emmacremeauxdev@gmail.com',
             password: hash,
             lastname: 'CREMAUX',
             firstname: 'Emma',
