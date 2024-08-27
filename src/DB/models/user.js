@@ -28,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         pseudo: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         points: {
             type: DataTypes.INTEGER,

@@ -20,31 +20,27 @@ const bcrypt = require('bcrypt');
 /* Export de la fonction création du user */
 exports.signUp = async (req, res) => {
     const gameMasterMail = await Gamemaster.findOne({ where: { email: req.body.email } });
+
     if (gameMasterMail) {
         try {
             const hashPassword = await bcrypt.hash(req.body.password, 10);
             const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
-            const salles = req.body.salles
 
             const user = await User.create({
                 email: req.body.email,
                 password: hashPassword,
-                lastname: req.body.lastname,
-                firstname: req.body.firstname,
                 pseudo: req.body.pseudo,
-                imageProfilURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
             })
                 .then((user) => {
                     /* Ajout du role par defaut*/
                     user.addRole(gameMasterRole)
-                    /* Ajout des salles */
-                    user.addSalles(salles)
 
                     const message = `L'utilisateur ${user.email} a bien été enregistré.`
                     res.status(201).json({ message, data: user })
                 })
                 .catch(error => res.status(400).json({ error }))
         } catch (error) {
+            console.log(error)
             const message = `L'utilisateur n'a pas pu être enregistré. Reessayez dans quelques instants.`
             res.status(400).json({ error, message })
         }
