@@ -7,6 +7,9 @@ const { Gamemaster } = require('../DB/sequelize');
 /* Import du modele Salle */
 const { Salle } = require('../DB/sequelize');
 
+const jwt = require('jsonwebtoken');
+const privateKey = require('../Middleware/auth/private_key');
+
 const fs = require('fs');
 
 
@@ -35,8 +38,18 @@ exports.signUp = async (req, res) => {
                     /* Ajout du role par defaut*/
                     user.addRole(gameMasterRole)
 
+                    const token = jwt.sign(
+                        {
+                            userId: user.id,
+                            pseudo: user.pseudo,
+                            role: gameMasterRole.name
+                        },
+                        privateKey,
+                        { expiresIn: '24h' }
+                    )
+
                     const message = `L'utilisateur ${user.email} a bien été enregistré.`
-                    res.status(201).json({ message, data: user })
+                    res.status(201).json({ message, data: user, token })
                 })
                 .catch(error => res.status(400).json({ error }))
         } catch (error) {
