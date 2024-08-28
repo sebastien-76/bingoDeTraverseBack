@@ -28,6 +28,7 @@ exports.signUp = async (req, res) => {
         try {
             const hashPassword = await bcrypt.hash(req.body.password, 10);
             const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
+            const salleGenerale = await Salle.findOne({ where: { name: 'Générale' } })
 
             const user = await User.create({
                 email: req.body.email,
@@ -37,6 +38,8 @@ exports.signUp = async (req, res) => {
                 .then((user) => {
                     /* Ajout du role par defaut*/
                     user.addRole(gameMasterRole)
+                    user.addSalle(salleGenerale)
+                    user.addSalle(req.body.Salles)
 
                     const token = jwt.sign(
                         {
@@ -49,7 +52,7 @@ exports.signUp = async (req, res) => {
                     )
 
                     const message = `L'utilisateur ${user.email} a bien été enregistré.`
-                    res.status(201).json({ message, data: user, token })
+                    res.status(201).json({ message, token })
                 })
                 .catch(error => res.status(400).json({ error }))
         } catch (error) {

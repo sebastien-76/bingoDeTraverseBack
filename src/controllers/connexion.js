@@ -34,7 +34,7 @@ exports.signin = (req, res) => {
                         { expiresIn: '24h' }
                     )
                     const message = `Connexion reussie.`
-                    res.json({ message, data: user, token })
+                    res.json({ message, token })
                 })
         })
         .catch(error => {
