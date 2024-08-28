@@ -13,8 +13,15 @@ const app = express();
 /* Accès au path du server */
 const path = require('path');
 
+/* Sanitizer */
+const sanitize = require('sanitize');
+
 /* Middleware pour parser le corps de la requête */
 app.use(express.json());
+
+/* Utilisation du middleware sanitize */
+app.use(sanitize.middleware);
+
 
 /* Middleware pour autoriser l'acces depuis n'importe quelle origine */
 app.use(cors());
