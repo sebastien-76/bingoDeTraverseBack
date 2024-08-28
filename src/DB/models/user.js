@@ -21,12 +21,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        lastname: {
-            type: DataTypes.STRING,
-        },
-        firstname: {
-            type: DataTypes.STRING,
-        },
         pseudo: {
             type: DataTypes.STRING,
             allowNull: false

@@ -127,16 +127,12 @@ const initDb = async () => {
         const seb = await User.create({
             email: 'sebastien.divers@gmail.com',
             password: hash,
-            lastname: 'MAILLET',
-            firstname: 'Sebastien',
             pseudo: 'Seb',
         });
 
         const emma = await User.create({
             email: 'emmacremeauxdev@gmail.com',
             password: hash,
-            lastname: 'CREMAUX',
-            firstname: 'Emma',
             pseudo: 'Emma',
         });
 
@@ -144,8 +140,6 @@ const initDb = async () => {
         const test = await User.create({
             email: 'test@gmail.com',
             password: hash,
-            lastname: 'test',
-            firstname: 'test',
             pseudo: 'test',
         });
 
