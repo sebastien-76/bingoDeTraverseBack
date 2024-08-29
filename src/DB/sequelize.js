@@ -106,12 +106,13 @@ const initDb = async () => {
         console.log('La base de donnée a bien été initialisée !');
 
         /* Creation d'une salle */
+        await Salle.create({ name: "Générale" });
         await Salle.create({ name: "512 : Chevaliers et Enchanteurs" });
         await Salle.create({ name: "1994 : Magie et Sortilèges" });
         await Salle.create({ name: "1965 : Enquête et Roman Noir" });
         await Salle.create({ name: "2006 : Hold-Up à Vegas"});
         await Salle.create({ name: "1999 : Murder Story" });
-        await Salle.create({ name: "Générale" });
+        
 
 
         // Création des rôles
@@ -150,21 +151,38 @@ const initDb = async () => {
 
         // Association de l'utilisateur à une salle
         await seb.addSalle([ 1, 2, 6 ]);
-        await emma.addSalle([ 3, 4, 5 , 6 ]);
-        await test.addSalle([ 6 ]);
+        await emma.addSalle([ 1, 3, 4, 5 ]);
+        await test.addSalle([ 1 ]);
 
 
         // creation des phrases pour la salle 1
-        await Phrase.create({ text: "phrase 1 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 2 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 3 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 4 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 5 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 6 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 7 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 8 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 9 salle 1", SalleId: 1 });
-        await Phrase.create({ text: "phrase 10 salle 1", SalleId: 1 });
+        await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 1 });
+        await Phrase.create({ text: "yes", SalleId: 1 });
+        await Phrase.create({ text: "trop bien!", SalleId: 1 });
+        await Phrase.create({ text: "j'aime", SalleId: 1 });
+        await Phrase.create({ text: "c'est nul", SalleId: 1 });
+        await Phrase.create({ text: "j'ai trouvé", SalleId: 1 });
+        await Phrase.create({ text: "un indice!", SalleId: 1 });
+        await Phrase.create({ text: "je ne comprend rien", SalleId: 1 });
+        await Phrase.create({ text: "tu pue", SalleId: 1 });
+        await Phrase.create({ text: "laisse moi faire", SalleId: 1 });
+        await Phrase.create({ text: "tu ne comprend pas", SalleId: 1 });
+        await Phrase.create({ text: "ya quelqu'un?", SalleId: 1 });
+        await Phrase.create({ text: "heho", SalleId: 1 });
+        await Phrase.create({ text: "tu peux répéter", SalleId: 1 });
+        await Phrase.create({ text: "j'ai peur!", SalleId: 1 });
+        await Phrase.create({ text: "j'entend rien!", SalleId: 1 });
+        await Phrase.create({ text: "je ne veux pas y aller", SalleId: 1 });
+        await Phrase.create({ text: "je veux faire pipi", SalleId: 1 });
+        await Phrase.create({ text: "hey c'est toi", SalleId: 1 });
+        await Phrase.create({ text: "on est trop fort", SalleId: 1 });
+        await Phrase.create({ text: "j'adore!", SalleId: 1 });
+        await Phrase.create({ text: "j'ai péter", SalleId: 1 });
+        await Phrase.create({ text: "ca s'ouvre", SalleId: 1 });
+        await Phrase.create({ text: "salut", SalleId: 1 });
+        await Phrase.create({ text: "coucou", SalleId: 1 });
+        await Phrase.create({ text: "j'ai mal", SalleId:1 });
+        await Phrase.create({ text: "beurk", SalleId: 1 });
 
         // creation des phrases pour la salle 2
         await Phrase.create({ text: "phrase 1 salle 2", SalleId: 2 });
@@ -215,34 +233,16 @@ const initDb = async () => {
         await Phrase.create({ text: "phrase 10 salle 5", SalleId: 5 });
 
         // creation des phrases pour la salle 6
-        await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 6 });
-        await Phrase.create({ text: "yes", SalleId: 6 });
-        await Phrase.create({ text: "trop bien!", SalleId: 6 });
-        await Phrase.create({ text: "j'aime", SalleId: 6 });
-        await Phrase.create({ text: "c'est nul", SalleId: 6 });
-        await Phrase.create({ text: "j'ai trouvé", SalleId: 6 });
-        await Phrase.create({ text: "un indice!", SalleId: 6 });
-        await Phrase.create({ text: "je ne comprend rien", SalleId: 6 });
-        await Phrase.create({ text: "tu pue", SalleId: 6 });
-        await Phrase.create({ text: "laisse moi faire", SalleId: 6 });
-        await Phrase.create({ text: "tu ne comprend pas", SalleId: 6 });
-        await Phrase.create({ text: "ya quelqu'un?", SalleId: 6 });
-        await Phrase.create({ text: "heho", SalleId: 6 });
-        await Phrase.create({ text: "tu peux répéter", SalleId: 6 });
-        await Phrase.create({ text: "salut", SalleId: 6 });
-        await Phrase.create({ text: "j'ai peur!", SalleId: 6 });
-        await Phrase.create({ text: "j'entend rien!", SalleId: 6 });
-        await Phrase.create({ text: "je ne veux pas y aller", SalleId: 6 });
-        await Phrase.create({ text: "je veux faire pipi", SalleId: 6 });
-        await Phrase.create({ text: "hey c'est toi", SalleId: 6 });
-        await Phrase.create({ text: "on est trop fort", SalleId: 6 });
-        await Phrase.create({ text: "j'adore!", SalleId: 6 });
-        await Phrase.create({ text: "j'ai péter", SalleId: 6 });
-        await Phrase.create({ text: "ca s'ouvre", SalleId: 6 });
-        await Phrase.create({ text: "salut", SalleId: 6 });
-        await Phrase.create({ text: "coucou", SalleId: 6 });
-        await Phrase.create({ text: "j'ai mal", SalleId: 6 });
-        await Phrase.create({ text: "beurk", SalleId: 6 });
+        await Phrase.create({ text: "phrase 1 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 2 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 3 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 4 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 5 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 6 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 7 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 8 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 9 salle 6", SalleId: 6 });
+        await Phrase.create({ text: "phrase 10 salle 6", SalleId: 6 });
         
 
         /* Creation d'un gamemaster */
