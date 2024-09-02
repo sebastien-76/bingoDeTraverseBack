@@ -1,4 +1,5 @@
 const { Salle } = require('../DB/sequelize');
+const { Phrase } = require('../DB/sequelize');
 
 exports.createSalle = (req, res) => {
     const user = req.body.user
@@ -71,11 +72,16 @@ exports.deleteSalle = (req, res) => {
                 return res.status(404).json({ message })
             }
             const salleDeleted = salle
+
             Salle.destroy({ where: { id: id } })
                 .then(() => {
-                    const message = `La salle ${salleDeleted.name} a bien été supprimée.`
-                    res.json({ message })
+                        const message = `La salle ${salleDeleted.name} a bien été supprimée.`
+                        res.json({ message })
+                    })
+                .then (() => {
+                    Phrase.destroy({ where: { salleId: id } })
                 })
+            
         })
         .catch(error => {
             message = `La salle avec l'identifiant ${id} n'a pas pu être supprimée. Reessayez dans quelques instants.`

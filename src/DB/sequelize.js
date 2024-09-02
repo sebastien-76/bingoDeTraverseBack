@@ -60,7 +60,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 /* Instanciation du modèle  User*/
-const User = UserModel(sequelize, DataTypes)
+const User = UserModel(sequelize, DataTypes) 
 
 /* Instanciation du modèle  Role*/
 const Role = RoleModel(sequelize, DataTypes)
@@ -69,7 +69,7 @@ const Role = RoleModel(sequelize, DataTypes)
 const Phrase = PhraseModel(sequelize, DataTypes)
 
 /* Instanciation du modèle  Salle*/
-const Salle = SalleModel(sequelize, DataTypes)
+const Salle = SalleModel(sequelize, DataTypes) 
 
 /* Instanciation du modèle  Gamemaster*/
 const Gamemaster = GamemasterModel(sequelize, DataTypes)
@@ -82,7 +82,7 @@ User.belongsToMany(Role, { through: 'Users_Roles' })
 Role.belongsToMany(User, { through: 'Users_Roles' })
 
 /* Association  One to Many entre salle et phrase */
-Salle.hasMany(Phrase)
+Salle.hasMany(Phrase, { onDelete: 'CASCADE' })
 Phrase.belongsTo(Salle)
 
 /* Association Many to Many entre salle et User */
