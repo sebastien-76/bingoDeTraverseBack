@@ -141,6 +141,9 @@ exports.updateUser = async (req, res) => {
                 if (req.body.Salles) {
                     user.addSalle(req.body.Salles)
                 }
+                if (req.body.Roles) {
+                    user.addRole(req.body.Roles)
+                }
                 const message = `Le user ${user.pseudo} a bien été modifiée.`
                 res.json({ message, data: user })
             })
