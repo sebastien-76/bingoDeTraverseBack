@@ -2,7 +2,7 @@ const user = require('../DB/models/user');
 const { Grille, Phrase, User, Salle } = require('../DB/sequelize');
 const { getUser } = require('./user');
 const { notifyParticipants } = require('../Middleware/mailer');
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
 
 // Créer une nouvelle grille pour un utilisateur spécifique
 exports.createGrille = async (req, res) => {
@@ -23,8 +23,8 @@ exports.createGrille = async (req, res) => {
         // recuperer les info de l'utilisateur
         const userPlayer = await User.findOne({
             where: { id: UserId },
-            include: [ Salle ]
-        })
+            include: [Salle]
+        });
 
         // Charger les salles de l'utilisateur
         const sallesUser = userPlayer.Salles;
@@ -72,6 +72,23 @@ exports.getGrilleByUser = async (req, res) => {
         if (!grille) {
             return res.status(404).json({ error: 'Grille non trouvée' });
         }
+        // Charger les phrases de la grille
+        const phrases = await Phrase.findAll({ where: { id: grille.case.map(c => c.phraseId) } });
+        const phrasesIds = phrases.map(p => p.id);
+
+        // Vérifier les phrases manquantes
+        const validatedCases = grille.validatedCases.map((isValid, index) => {
+            if (isValid) return true;
+            const phraseExists = phrasesIds.includes(grille.case[index].phraseId);
+            return !phraseExists;
+        });
+
+        // Mettre à jour la grille si nécessaire
+        if (validatedCases.includes(true)) {
+            grille.validatedCases = validatedCases;
+            await grille.save();
+        }
+
         res.status(200).json({ message: 'La grille a bien été trouvée', data: grille });
     } catch (error) {
         console.error("Erreur lors de la récupération de la grille :", error);
@@ -95,94 +112,86 @@ exports.getGrilleById = async (req, res) => {
 };
 
 exports.updateGrille = async (req, res) => {
-  const id = req.params.id;
-  const caseValide = req.body.validatedCases;
+    const id = req.params.id;
+    const { validatedCases } = req.body;
 
-  try {
-    const grille = await Grille.findByPk(id);
-    if (!grille) {
-      return res.status(404).json({ error: 'Grille non trouvée' });
+    try {
+        const grille = await Grille.findByPk(id);
+        if (!grille) {
+            return res.status(404).json({ error: 'Grille non trouvée' });
+        }
+
+        grille.validatedCases = validatedCases;
+
+        // Vérification si la grille est terminée
+        grille.finished = false;
+        for (let i = 0; i < 5; i++) {
+            if (
+                grille.validatedCases[i * 5] && grille.validatedCases[i * 5 + 1] &&
+                grille.validatedCases[i * 5 + 2] && grille.validatedCases[i * 5 + 3] &&
+                grille.validatedCases[i * 5 + 4]
+            ) {
+                grille.finished = true;
+                break;
+            }
+            if (
+                grille.validatedCases[i] && grille.validatedCases[i + 5] &&
+                grille.validatedCases[i + 10] && grille.validatedCases[i + 15] &&
+                grille.validatedCases[i + 20]
+            ) {
+                grille.finished = true;
+                break;
+            }
+            if (
+                grille.validatedCases[0] && grille.validatedCases[6] &&
+                grille.validatedCases[12] && grille.validatedCases[18] &&
+                grille.validatedCases[24]
+            ) {
+                grille.finished = true;
+                break;
+            }
+            if (
+                grille.validatedCases[4] && grille.validatedCases[8] &&
+                grille.validatedCases[12] && grille.validatedCases[16] &&
+                grille.validatedCases[20]
+            ) {
+                grille.finished = true;
+                break;
+            }
+        }
+
+        await grille.save();
+
+        // Si la grille est terminée et que ce n'est pas le userTest qui a terminé la grille
+        if (grille.finished) {
+            const userTest = await User.findOne({ where: { email: 'test@gmail.com' } });
+
+            if (grille.UserId !== userTest.id) {
+                // Ajouter un point au user qui a fini la grille
+                const user = await User.findByPk(grille.UserId);
+                user.points += 1;
+                await user.save();
+
+                // Récupérer les e-mails des autres participants
+                const participants = await User.findAll({
+                    where: { id: { [Op.ne]: grille.UserId } }
+                });
+                const participantsEmails = participants.map(p => p.email);
+
+                // Notifier les participants
+                await notifyParticipants(user.pseudo, participantsEmails);
+
+                /* // Supprimer toutes les autres grilles
+                await Grille.destroy({
+                    where: {}
+                }); */
+            }
+        }
+
+        return res.status(200).json({ message: 'La grille a bien été modifiée', data: grille });
+
+    } catch (error) {
+        console.error("Erreur lors de la modification de la grille :", error);
+        return res.status(500).json({ error: 'La grille n\'a pas pu être modifiée.' });
     }
-
-    grille.validatedCases = caseValide;
-
-    // Vérification si la grille est terminée
-    grille.finished = false;
-    for (let i = 0; i < 5; i++) {
-      if (
-        grille.validatedCases[i * 5] && grille.validatedCases[i * 5 + 1] && 
-        grille.validatedCases[i * 5 + 2] && grille.validatedCases[i * 5 + 3] && 
-        grille.validatedCases[i * 5 + 4]
-      ) {
-        grille.finished = true;
-        break;
-      }
-      if (
-        grille.validatedCases[i] && grille.validatedCases[i + 5] && 
-        grille.validatedCases[i + 10] && grille.validatedCases[i + 15] && 
-        grille.validatedCases[i + 20]
-      ) {
-        grille.finished = true;
-        break;
-      }
-      if (
-        grille.validatedCases[0] && grille.validatedCases[6] && 
-        grille.validatedCases[12] && grille.validatedCases[18] && 
-        grille.validatedCases[24]
-      ) {
-        grille.finished = true;
-        break;
-      }
-      if (
-        grille.validatedCases[4] && grille.validatedCases[8] && 
-        grille.validatedCases[12] && grille.validatedCases[16] && 
-        grille.validatedCases[20]
-      ) {
-        grille.finished = true;
-        break;
-      }
-    }
-
-    // recuperer le user dont le mail est test@gmail.com
-    const userTest = await User.findOne({ where: { email: 'test@gmail.com' } });
-
-
-    await grille.save();
-
-    // Si la grille est terminée et que ce n'est pas le userTest qui a terminé la grille
-    if (grille.finished && grille.UserId !== userTest.id) {
-      // Ajouter un point au user qui a fini la grille
-      const user = await User.findByPk(grille.UserId);
-      user.points += 1;
-      await user.save();
-
-      // Récupérer les e-mails des autres participants
-      const participants = await User.findAll({
-        // Trouver tous les autres utilisateurs
-        where: { id: { [Op.ne]: grille.UserId } } 
-      });
-      const participantsEmails = participants.map(p => p.email);
-
-      // Notifier les participants
-      await notifyParticipants(user.pseudo, participantsEmails);
-
-      // Supprimer toutes les autres grilles
-      await Grille.destroy({
-        where: {}
-      });
-    }
-
-    // Si la grille n'est pas terminée, renvoyer une réponse normale
-    return res.status(200).json({ message: 'La grille a bien été modifiée', data: grille });
-
-  } catch (error) {
-    console.error("Erreur lors de la modification de la grille :", error);
-    return res.status(500).json({ error: 'La grille n\'a pas pu être modifiée.' });
-  }
 };
-
-  
-
-
-
-  
