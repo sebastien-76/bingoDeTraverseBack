@@ -69,7 +69,10 @@ exports.signUp = async (req, res) => {
 
 exports.getUsers = (req, res) => {
     User.findAll({
-        include: Salle
+        include: [
+            { model: Salle },
+            { model: Role }
+        ]
     })
         .then(users => {
             const message = `Liste des users : `;
@@ -127,7 +130,7 @@ exports.updateUser = async (req, res) => {
         imageProfilURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
         req.body.imageProfilURL = imageProfilURL
     }
-    
+
     await User.update(req.body, { where: { id: id }, include: [{ model: Salle }, { model: Role }] })
         .then(() => {
             return User.findByPk(id).then(user => {
