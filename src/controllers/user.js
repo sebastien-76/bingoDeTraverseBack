@@ -22,12 +22,12 @@ const bcrypt = require('bcrypt');
 
 /* Export de la fonction création du user */
 exports.signUp = async (req, res) => {
-    const gameMasterMail = await Gamemaster.findOne({ where: { email: req.body.email } });
+    const gamemasterMail = await Gamemaster.findOne({ where: { email: req.body.email } });
 
-    if (gameMasterMail) {
+    if (gamemasterMail) {
         try {
             const hashPassword = await bcrypt.hash(req.body.password, 10);
-            const gameMasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
+            const gamemasterRole = await Role.findOne({ where: { name: 'GAMEMASTER' } })
             const salleGenerale = await Salle.findOne({ where: { name: 'Générale' } })
 
             const user = await User.create({
@@ -37,7 +37,7 @@ exports.signUp = async (req, res) => {
             })
                 .then((user) => {
                     /* Ajout du role par defaut*/
-                    user.addRole(gameMasterRole)
+                    user.addRole(gamemasterRole)
                     user.addSalle(salleGenerale)
                     user.addSalle(req.body.Salles)
 
@@ -45,7 +45,7 @@ exports.signUp = async (req, res) => {
                         {
                             userId: user.id,
                             pseudo: user.pseudo,
-                            role: gameMasterRole.name
+                            role: gamemasterRole.name
                         },
                         privateKey,
                         { expiresIn: '24h' }
@@ -125,6 +125,7 @@ exports.updateUser = async (req, res) => {
             })
         req.body.password = hashPassword
     }
+    const adminRole = await Role.findOne({ where: { name: 'ADMIN' } })
 
     if (req.file) {
         imageProfilURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
@@ -133,6 +134,7 @@ exports.updateUser = async (req, res) => {
 
     await User.update(req.body, { where: { id: id }, include: [{ model: Salle }, { model: Role }] })
         .then(() => {
+            
             return User.findByPk(id).then(user => {
                 if (user === null) {
                     const message = `Le user n'existe pas. Reessayez avec un autre identifiant.`
@@ -141,9 +143,13 @@ exports.updateUser = async (req, res) => {
                 if (req.body.Salles) {
                     user.addSalle(req.body.Salles)
                 }
-                if (req.body.Roles) {
-                    user.addRole(req.body.Roles)
+                if (req.body.Roles == 'ADMIN') {
+                    user.addRole(adminRole)
                 }
+                if (req.body.deletedRoles == 'ADMIN') {
+                    user.removeRole(adminRole)
+                }
+
                 const message = `Le user ${user.pseudo} a bien été modifiée.`
                 res.json({ message, data: user })
             })
