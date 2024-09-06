@@ -181,10 +181,10 @@ exports.updateGrille = async (req, res) => {
                 // Notifier les participants
                 await notifyParticipants(user.pseudo, participantsEmails);
 
-                /* // Supprimer toutes les autres grilles
+                // Supprimer toutes les autres grilles
                 await Grille.destroy({
                     where: {}
-                }); */
+                });
             }
         }
 

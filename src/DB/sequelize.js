@@ -60,7 +60,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 /* Instanciation du modèle  User*/
-const User = UserModel(sequelize, DataTypes) 
+const User = UserModel(sequelize, DataTypes)
 
 /* Instanciation du modèle  Role*/
 const Role = RoleModel(sequelize, DataTypes)
