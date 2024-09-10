@@ -156,33 +156,33 @@ const initDb = async () => {
 
 
         // creation des phrases pour la salle 1
-        await Phrase.create({ text: "Ca je te l'avais dit!", SalleId: 1 });
-        await Phrase.create({ text: "yes", SalleId: 1 });
-        await Phrase.create({ text: "trop bien!", SalleId: 1 });
-        await Phrase.create({ text: "j'aime", SalleId: 1 });
-        await Phrase.create({ text: "c'est nul", SalleId: 1 });
-        await Phrase.create({ text: "j'ai trouvé", SalleId: 1 });
-        await Phrase.create({ text: "un indice!", SalleId: 1 });
-        await Phrase.create({ text: "je ne comprend rien", SalleId: 1 });
-        await Phrase.create({ text: "tu pue", SalleId: 1 });
-        await Phrase.create({ text: "laisse moi faire", SalleId: 1 });
-        await Phrase.create({ text: "tu ne comprend pas", SalleId: 1 });
-        await Phrase.create({ text: "ya quelqu'un?", SalleId: 1 });
-        await Phrase.create({ text: "heho", SalleId: 1 });
-        await Phrase.create({ text: "tu peux répéter", SalleId: 1 });
-        await Phrase.create({ text: "j'ai peur!", SalleId: 1 });
-        await Phrase.create({ text: "j'entend rien!", SalleId: 1 });
-        await Phrase.create({ text: "je ne veux pas y aller", SalleId: 1 });
-        await Phrase.create({ text: "je veux faire pipi", SalleId: 1 });
-        await Phrase.create({ text: "hey c'est toi", SalleId: 1 });
-        await Phrase.create({ text: "on est trop fort", SalleId: 1 });
-        await Phrase.create({ text: "j'adore!", SalleId: 1 });
-        await Phrase.create({ text: "j'ai péter", SalleId: 1 });
-        await Phrase.create({ text: "ca s'ouvre", SalleId: 1 });
-        await Phrase.create({ text: "salut", SalleId: 1 });
-        await Phrase.create({ text: "coucou", SalleId: 1 });
-        await Phrase.create({ text: "j'ai mal", SalleId:1 });
-        await Phrase.create({ text: "beurk", SalleId: 1 });
+        await Phrase.create({ text: "phrase 1 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 2 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 3 salle générale!", SalleId: 1 });
+        await Phrase.create({ text: "phrase 4 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 5 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 6 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 7 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 8 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 9 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 10 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 11 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 12 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 13 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 14 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 15 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 16 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 17 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 18 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 19 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 20 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 21 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 22 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 23 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 24 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 25 salle générale", SalleId: 1 });
+        await Phrase.create({ text: "phrase 26 salle générale", SalleId:1 });
+        await Phrase.create({ text: "phrase 27 salle générale", SalleId: 1 });
 
         // creation des phrases pour la salle 2
         await Phrase.create({ text: "phrase 1 salle 2", SalleId: 2 });
