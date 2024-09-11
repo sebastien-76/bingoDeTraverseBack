@@ -1,5 +1,8 @@
 /* L’API Rest et la Base de données : Créer un modèle Sequelize */
 
+//import .env
+require('dotenv').config();
+
 /* Import de sequelize */
 const { Sequelize, DataTypes } = require('sequelize')
 
@@ -29,8 +32,8 @@ let sequelize
 
 if (process.env.NODE_ENV === 'production') {
     /* Connexion a la base de données en production */
-    sequelize = new Sequelize('nomBdD', 'user', 'password', {
-        host: 'nomHost',
+    sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+        host: process.env.DB_HOST,
         dialect: 'mariadb',
         dialectOptions: {
             timezone: 'Etc/GMT-2',
@@ -181,7 +184,7 @@ const initDb = async () => {
         await Phrase.create({ text: "phrase 23 salle générale", SalleId: 1 });
         await Phrase.create({ text: "phrase 24 salle générale", SalleId: 1 });
         await Phrase.create({ text: "phrase 25 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 26 salle générale", SalleId:1 });
+        await Phrase.create({ text: "phrase 26 salle générale", SalleId: 1 });
         await Phrase.create({ text: "phrase 27 salle générale", SalleId: 1 });
 
         // creation des phrases pour la salle 2

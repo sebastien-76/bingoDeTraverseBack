@@ -6,7 +6,8 @@ dotenv.config();
 
 // Créer un transporteur SMTP
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
