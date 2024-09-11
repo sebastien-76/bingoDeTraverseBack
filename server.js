@@ -1,6 +1,9 @@
 /* Import package http de node */
 const http = require('http');
 
+//import .env
+require('dotenv').config();
+
 /* Import de l'application */
 const app = require('./app');
 
