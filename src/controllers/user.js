@@ -128,7 +128,7 @@ exports.updateUser = async (req, res) => {
     const adminRole = await Role.findOne({ where: { name: 'ADMIN' } })
 
     if (req.file) {
-        imageProfilURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        imageProfilURL = `https://${req.get('host')}/images/${req.file.filename}`;
         req.body.imageProfilURL = imageProfilURL
     }
 
