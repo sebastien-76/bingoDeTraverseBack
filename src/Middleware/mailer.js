@@ -1,7 +1,7 @@
 // services/mailer.js
 const nodemailer = require('nodemailer');
 
-const dotenv = require ( "dotenv" );
+const dotenv = require("dotenv");
 dotenv.config();
 
 // Créer un transporteur SMTP
@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
-  
+
 });
 
 // Fonction pour envoyer un e-mail
@@ -33,24 +33,26 @@ const sendEmail = async (to, subject, text) => {
 
 // Fonction pour notifier les participants
 const notifyParticipants = async (winnerName, participants) => {
-    try {
-        const mailOptions = {
-            from: 'your-email@gmail.com',
-            to: participants.join(', '),
-            subject: 'Grille de Bingo Terminée',
-            text: `Bonjour,
+  try {
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: participants.join(', '),
+      subject: 'Grille de Bingo Terminée',
+      text: `Bonjour,
 
-La grille de bingo a été terminée ! Félicitations à ${winnerName} pour avoir validé un Bingo !
+Félicitation à ${winnerName} qui a validé sa grille de bingo !
+A toi de faire mieux à la prochaine partie !
+Soit plus rapide et plus efficace la prochaine fois...
 
 Cordialement,
 L'équipe du Bingo de Traverse`,
-        };
+    };
 
-        await transporter.sendMail(mailOptions);
-        console.log('E-mails envoyés avec succès');
-    } catch (error) {
-        console.error('Erreur lors de l\'envoi de l\'e-mail :', error);
-    }
+    await transporter.sendMail(mailOptions);
+    console.log('E-mails envoyés avec succès');
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi de l\'e-mail :', error);
+  }
 };
 
 module.exports = {
