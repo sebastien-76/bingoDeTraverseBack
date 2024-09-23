@@ -24,9 +24,12 @@ const GamemasterModel = require('./models/gamemaster')
 /* Import du modèle grille */
 const GrilleModel = require('./models/grille')
 
-
-/* Import du paquet bcrypt */
-const bcrypt = require('bcrypt')
+// Import des donnees
+const users = require('./datas/users')
+const gamemasters = require('./datas/gamemasters')
+const roles = require('./datas/roles')
+const salles = require('./datas/salles')
+const phrases = require('./datas/phrases')
 
 let sequelize
 
@@ -72,7 +75,7 @@ const Role = RoleModel(sequelize, DataTypes)
 const Phrase = PhraseModel(sequelize, DataTypes)
 
 /* Instanciation du modèle  Salle*/
-const Salle = SalleModel(sequelize, DataTypes) 
+const Salle = SalleModel(sequelize, DataTypes)
 
 /* Instanciation du modèle  Gamemaster*/
 const Gamemaster = GamemasterModel(sequelize, DataTypes)
@@ -101,157 +104,56 @@ Grille.belongsToMany(Phrase, { through: 'Grilles_Phrases' })
 Phrase.belongsToMany(Grille, { through: 'Grilles_Phrases' })
 
 
-
 /* Synchro de la base de données ( option "force: true" pour vider la base) */
 const initDb = async () => {
     try {
         await sequelize.sync({ force: true });
-        console.log('La base de donnée a bien été initialisée !');
-
-        /* Creation d'une salle */
-        await Salle.create({ name: "Générale" });
-        await Salle.create({ name: "512 : Chevaliers et Enchanteurs" });
-        await Salle.create({ name: "1994 : Magie et Sortilèges" });
-        await Salle.create({ name: "1965 : Enquête et Roman Noir" });
-        await Salle.create({ name: "2006 : Hold-Up à Vegas"});
-        await Salle.create({ name: "1999 : Murder Story" });
-        
-
 
         // Création des rôles
-        const adminRole = await Role.create({ name: 'ADMIN' });
-        console.log(adminRole.toJSON());
-        const gameMasterRole = await Role.create({ name: 'GAMEMASTER' });
-        console.log(gameMasterRole.toJSON());
+        roles.map(role => {
+            Role.create({
+                name: role.name
+            })
+        })
 
-        // Cryptage du mot de passe
-        const hash = await bcrypt.hash('bingo', 10);
+        // Creation des salles
+        salles.map(salle => {
+            Salle.create({
+                name: salle.name
+            })
+        })
 
-        // Création d'un user avec le mot de passe crypté et le rôle existant
-        const seb = await User.create({
-            email: 'sebastien.divers@gmail.com',
-            password: hash,
-            pseudo: 'Seb',
-        });
+        // Creation des gamemaster
+        gamemasters.map(gamemaster => {
+            Gamemaster.create({
+                email: gamemaster.email
+            })
+        })
 
-        const emma = await User.create({
-            email: 'emmacremeauxdev@gmail.com',
-            password: hash,
-            pseudo: 'Emma',
-        });
-
-        // Creation d'un user test
-        const test = await User.create({
-            email: 'test@gmail.com',
-            password: hash,
-            pseudo: 'test',
-        });
-
-        // Association des roles admin et gamemaster à l'utilisateur
-        await seb.addRole([adminRole, gameMasterRole]);
-        await emma.addRole([gameMasterRole]);
-        await test.addRole([adminRole, gameMasterRole]);
-
-        // Association de l'utilisateur à une salle
-        await seb.addSalle([ 1, 2, 6 ]);
-        await emma.addSalle([ 1, 3, 4, 5 ]);
-        await test.addSalle([ 1 ]);
-
+        // Création des users
+        users.map(user => {
+            User.create({
+                email: user.email,
+                password: user.password,
+                pseudo: user.pseudo
+            })
+                .then(user => {
+                    // Association des roles admin et gamemaster à l'utilisateur
+                    user.addRole([1, 2]);
+                    // Association de la salle 1 à l'utilisateur
+                    user.addSalle([1]);
+                });
+        })
 
         // creation des phrases pour la salle 1
-        await Phrase.create({ text: "phrase 1 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 2 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 3 salle générale!", SalleId: 1 });
-        await Phrase.create({ text: "phrase 4 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 5 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 6 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 7 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 8 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 9 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 10 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 11 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 12 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 13 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 14 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 15 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 16 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 17 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 18 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 19 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 20 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 21 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 22 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 23 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 24 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 25 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 26 salle générale", SalleId: 1 });
-        await Phrase.create({ text: "phrase 27 salle générale", SalleId: 1 });
+        phrases.map(phrase => {
+            Phrase.create({
+                text: phrase.text,
+                SalleId: phrase.SalleId
+            })
+        })
 
-        // creation des phrases pour la salle 2
-        await Phrase.create({ text: "phrase 1 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 2 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 3 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 4 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 5 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 6 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 7 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 8 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 9 salle 2", SalleId: 2 });
-        await Phrase.create({ text: "phrase 10 salle 2", SalleId: 2 });
-
-        // creation des phrases pour la salle 3
-        await Phrase.create({ text: "phrase 1 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 2 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 3 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 4 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 5 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 6 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 7 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 8 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 9 salle 3", SalleId: 3 });
-        await Phrase.create({ text: "phrase 10 salle 3", SalleId: 3 });
-
-        // creation des phrases pour la salle 4
-        await Phrase.create({ text: "phrase 1 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 2 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 3 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 4 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 5 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 6 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 7 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 8 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 9 salle 4", SalleId: 4 });
-        await Phrase.create({ text: "phrase 10 salle 4", SalleId: 4 });
-
-        // creation des phrases pour la salle 5
-        await Phrase.create({ text: "phrase 1 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 2 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 3 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 4 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 5 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 6 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 7 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 8 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 9 salle 5", SalleId: 5 });
-        await Phrase.create({ text: "phrase 10 salle 5", SalleId: 5 });
-
-        // creation des phrases pour la salle 6
-        await Phrase.create({ text: "phrase 1 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 2 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 3 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 4 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 5 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 6 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 7 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 8 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 9 salle 6", SalleId: 6 });
-        await Phrase.create({ text: "phrase 10 salle 6", SalleId: 6 });
-        
-
-        /* Creation d'un gamemaster */
-        await Gamemaster.create({ email: "emma.cremeaux@hotmail.fr" });
-
-
+        console.log('La base de donnée a bien été initialisée !');
 
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de la base de données: ', error);
