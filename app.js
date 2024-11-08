@@ -37,6 +37,8 @@ const gamemastersRoutes = require('./src/Routes/gamemaster')
 const userRoutes = require('./src/Routes/user')
 const connexionRoutes = require('./src/Routes/connexion')
 const grillesRoutes = require('./src/Routes/grille');
+const authRoutes = require('./src/Routes/auth');
+
 
 /* Utilisation des routes */
 app.use('/images', express.static(path.join(__dirname, '/images')));
@@ -47,6 +49,7 @@ app.use('/api/gamemasters', gamemastersRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/connexion', connexionRoutes)
 app.use('/api/grilles', grillesRoutes);
+app.use('/api/auth', authRoutes);
 
 
 /* Export de l'application */

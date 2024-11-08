@@ -1,4 +1,4 @@
-/* Création du modèle User */
+// models/user.js
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('User', {
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 isEmail: true
             },
             unique: {
-                msg: "Ce nom d'utilisateur est déjà utilisé, veuillez en choisir un autre!"
+                msg: "Cet email est déjà utilisé."
             }
         },
         password: {
@@ -31,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         imageProfilURL: {
             type: DataTypes.STRING
+        },
+        resetPasswordToken: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        resetPasswordExpires: {
+            type: DataTypes.DATE,
+            allowNull: true
         }
-    })
+    });
 }
